@@ -3,10 +3,12 @@ name = "ats-resume"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = "==3.12.12"
 dependencies = [
-    "langchain>=1.1.0",
+    "crewai>=1.6.1",
+    "crewai-tools>=1.6.1",
     "pydantic>=2.12.5",
     "pydantic-settings>=2.12.0",
+    "python-docx>=1.2.0",
     "requests>=2.32.5",
 ]
