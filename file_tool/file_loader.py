@@ -1,5 +1,5 @@
 import io
-from pymupdf import fitz
+import fitz
 from docx import Document
 
 def extract_text_from_pdf(pdf_path):
