@@ -1,20 +1,20 @@
 import os
 from crewai import Crew, Process
 
-from .agents import (
+from agents import (
     build_ats_evaluator_agent,
     build_ats_writer_agent,
     build_ats_refiner_agent,
     build_parse_agent,
 )
 
-from .task import (
+from task import (
     parse_resume_task,
     rewrite_for_ats_task,
     refine_bulet_task,
     evaluation_ats_task,
 )
-from .config import settings
+from config import settings
 
 
 def build_crew(raw_resume_text, job_description, job_title):
@@ -99,8 +99,7 @@ def run_pipeline(raw_resume_text, job_description, job_title):
     evaluation_result = str(evaluation_result).strip()
 
     return {
-        "rewritten_resume": rewriter_result,
-        "refined_resume": refiner_result,
+        "parsed_resume": parser_result,
         "optimized_resume": final_resume,
         "evaluation": evaluation_result,
     }
