@@ -7,6 +7,6 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", extra="forbid")
     OPENAI_API_KEY: SecretStr
-
+    CREWAI_TRACING_ENABLED: bool = False
 
 settings = Settings()
