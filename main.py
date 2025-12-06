@@ -1,9 +1,10 @@
 import os
 import json
 from dotenv import load_dotenv
+from file_tool.file_loader import detect_and_extract
 import streamlit as st
 
-from .crew import run_pipeline
+from crew_app import run_pipeline
 
 load_dotenv()
 
@@ -28,17 +29,18 @@ with col2:
 
 run_button = st.button("Optimize Resume for ATS agent 🚀")
 
-tabs = st.tabs(["Re-written","Refined","Optimized Resume", "Evaluation Report"])
+tabs = st.tabs(["Parsed","Optimized Resume", "Evaluation Report"])
 
 if run_button:
     if up is not None:
         with st.spinner("Extracting resume text..."):
             raw_resume_text = ""
-            with open("temp_uploaded_file", "wb") as f:
+            # Save file with original extension
+            temp_file_path = f"temp_uploaded_file{os.path.splitext(up.name)[1]}"
+            with open(temp_file_path, "wb") as f:
                 f.write(up.getbuffer())
-            from file_tool.file_loader import detect_and_extract
-            raw_resume_text = detect_and_extract("temp_uploaded_file")
-            os.remove("temp_uploaded_file")
+            raw_resume_text = detect_and_extract(temp_file_path)
+            os.remove(temp_file_path)
 
         with st.spinner("Running ATS Optimization Pipeline..."):
             if not raw_resume_text.strip():
@@ -51,18 +53,14 @@ if run_button:
             result = run_pipeline(raw_resume_text.strip(), job_description.strip(), job_title.strip())
 
         with tabs[0]:
-            st.subheader("Re-written Resume for ATS")
-            st.text_area("Re-written Resume", value=result["rewritten_resume"], height=400)
+            st.subheader("Parsed Resume for ATS")
+            st.text_area("Parsed Resume", value=result["parsed_resume"], height=400)
 
         with tabs[1]:
-            st.subheader("Refined Resume")
-            st.text_area("Refined Resume", value=result["refined_resume"], height=400)
-
-        with tabs[2]:
             st.subheader("Optimized Resume")
             st.text_area("Optimized Resume", value=result["optimized_resume"], height=400)
 
-        with tabs[3]:
+        with tabs[2]:
             st.subheader("Evaluation Report")
             st.text_area("Evaluation Report", value=result["evaluation"], height=400)
     else:
